@@ -4,21 +4,25 @@
 Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
+    vb.memory = "2048"
     vb.cpus = "2"
   end
 
   config.vm.define "bijou" do |bijou|
     bijou.vm.box = "hashicorp/bionic64"
     bijou.vm.hostname = "bijou"
-    bijou.vm.provision :shell, path: "bootstrap_minikube.sh"
-
+    bijou.vm.provision "shell" do |s|
+	s.privileged = false
+	s.path = "./bootstrap_minikube.sh"
+    end
   end
 
   config.vm.define "sully" do |sully|
     sully.vm.box = "hashicorp/bionic64"
     sully.vm.hostname = "sully"
-    sully.vm.provision :shell, path: "bootstrap_minikube.sh"
+    sully.vm.provision "shell" do |s|
+	s.privileged = false
+	s.path = "./bootstrap_minikube.sh"
+    end
   end
-
 end
