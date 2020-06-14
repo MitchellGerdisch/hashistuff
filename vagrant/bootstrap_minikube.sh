@@ -53,6 +53,11 @@ chmod +x ./kubectl
 sudo mv ./kubectl /usr/bin/kubectl
 ## end kubectl install
 
+echo "***** DEBUG minikube start"
+echo "***** DEBUG This may take some time ...."
+# Start up minikube cluster
+minikube start 2> /dev/null
+
 echo "***** DEBUG  helm install"
 ### start helm install ###
 curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
@@ -60,10 +65,5 @@ chmod 700 get_helm.sh
 ./get_helm.sh 2> /dev/null
 echo "***** DEBUG helm init"
 helm init
-
-echo "***** DEBUG minikube start"
-echo "***** DEBUG This may take some time ...."
-# Start up minikube cluster
-minikube start 2> /dev/null
 
 echo "***** DEBUG script done"
