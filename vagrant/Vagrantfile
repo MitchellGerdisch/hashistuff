@@ -22,12 +22,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "bijou" do |bijou|
     bijou.vm.hostname = "bijou"
 
-    # get consul binary to create key for gossip secret
-    bijou.vm.provision "shell" do |b|
-      b.privileged = false
-      b.path = "./bootstrap_consul_cli.sh"
-    end
-
     # set up consul for primary datacenter
     bijou.vm.provision "file", source: "./consul_primary.yaml", destination: "/tmp/consul_primary.yaml"
     bijou.vm.provision "shell" do |b|

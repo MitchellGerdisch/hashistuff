@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "***** DEBUG  Starting script as $USER"
-
 #####
 # This script sets up a VM so it can run minikube and kubectl and helm.
 # It sets things up so minikube uses the docker driver so that minikube will run on  VM.

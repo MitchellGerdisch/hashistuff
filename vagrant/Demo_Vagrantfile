@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+### DOWNLOADED AS A REFERENCE EXAMPLE
+
 $script = <<SCRIPT
 echo "Installing dependencies ..."
 sudo apt-get update

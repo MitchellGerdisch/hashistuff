@@ -1,5 +1,8 @@
 #!/bin/bash
 
+### Currently, not working.
+### Launches the consul pods but they get stuck and never come up.
+### Have not dug into the problem yet.
 
 
 # Get consul binary simply to be able to do keygen to set up gossip secret
