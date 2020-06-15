@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** Provision VM ${HOSTNAME}"
+echo "**** Provisioning k3s on VM ${HOSTNAME}"
 
 echo "**** INSTALLING k3s"
 ###
@@ -20,4 +20,4 @@ kubectl --namespace kube-system create serviceaccount tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 helm init --service-account tiller --upgrade
 
-echo "***** $0 completed"
+echo "***** VM, ${HOSTNAME} k3s provisioning completed"
