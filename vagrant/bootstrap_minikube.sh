@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "***** DEBUG  Starting script as $USER"
 

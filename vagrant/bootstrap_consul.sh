@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 consul_zip="consul_1.7.4_linux_amd64.zip"
 consul_download = "https://releases.hashicorp.com/consul/1.7.4/${consul_zip}"
