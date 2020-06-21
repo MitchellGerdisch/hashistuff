@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Tryig out Consul service mesh.
+# Sets up two single node k3s kubernetes clusters.
+# One is set up as a primary data center and the other secondary.
+
+# WORK IN PROGRESS
+
 Vagrant.configure("2") do |config|
 
   # VMs are 2CPUs X 2GB
