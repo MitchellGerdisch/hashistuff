@@ -1,0 +1,38 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Builds a server from which to run terraform
+
+Vagrant.configure("2") do |config|
+
+  # VMs are 1CPUs X 1GB
+  cpus = "1"
+  memory = "1024"
+
+  # ubuntu 
+  box = "hashicorp/bionic64"
+  config.vm.box = box
+
+  # Name and configs for the terraform VM
+  terraform_node = {
+	"terry" => { "ip" => "172.1.1.200", "mem" => memory, "cpu" => cpus },
+  }
+
+  terraform_node.each do |name, settings|
+    config.vm.define name do |vmcfg|
+      vmcfg.vm.hostname = name
+      vmcfg.vm.network "private_network", ip: settings["ip"]
+
+      vmcfg.vm.provider "virtualbox" do |vb|
+        vb.memory = settings["mem"]
+        vb.cpus = settings["cpu"]
+      end
+
+      # Install terraform
+      vmcfg.vm.provision "shell" do |s|
+        s.privileged = false
+        s.path = "./bootstrap_terraform.sh"
+      end
+    end
+  end
+end
