@@ -15,7 +15,7 @@ join_command=`sudo kubeadm token create --print-join-command 2> /dev/null`
 # drop it in the shared vagrant directory so the worker nodes can access it
 join_command_script="/vagrant/join_command.sh"
 echo "sudo ${join_command}" > ${join_command_script}
-chmod 755 ${join_command_scrip}
+chmod 755 ${join_command_script}
 
 # Configure kubectl for use by non-root
 mkdir -p $HOME/.kube
