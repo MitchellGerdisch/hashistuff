@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Installs terraform
+
 terraform_version="0.12.29"
 terraform_pkg="terraform_${terraform_version}_linux_amd64.zip"
 terraform_bin=$HOME/bin
