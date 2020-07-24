@@ -1,0 +1,66 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Builds a 3-node k8s cluster
+
+# WORK IN PROGRESS
+
+Vagrant.configure("2") do |config|
+
+  # VMs are 2CPUs X 2GB
+  cpus = "2"
+  memory = "2048"
+
+  # ubuntu 
+  box = "hashicorp/bionic64"
+
+  # Names and configs for the cluster VMs
+  # Currently all the same configs
+  cluster = {
+	"bijou" => { "ip" => "172.1.1.100", "mem" => memory, "cpu" => cpus, "box" => box },
+	"sully" => { "ip" => "172.1.1.101", "mem" => memory, "cpu" => cpus, "box" => box },
+	"sniffles" => { "ip" => "172.1.1.102", "mem" => memory, "cpu" => cpus, "box" => box }
+  }
+
+  # Install k3s basics
+  config.vm.provision "shell" do |s|
+    s.privileged = false
+    s.path = "./bootstrap_k8s_base.sh"
+  end
+
+  # Bijou is controller node
+  config.vm.define :bijou do |vmcfg|
+    name = "bijou"
+    settings = cluster[name]
+
+    vmcfg.vm.hostname = name
+    vmcfg.vm.box = settings["box"]
+    vmcfg.vm.network "private_network", ip: settings["ip"]
+
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = settings["mem"]
+      vb.cpus = settings["cpu"]
+    end
+
+    config.vm.provision "shell" do |controller|
+      controller.privileged = false 	
+      controller.path = "./bootstrap_k8s_control_node.sh"
+      controller.args = [settings["ip"]]
+    end
+  end
+
+  # worker nodes
+  config.vm.define :sully do |vmcfg|
+    name = "sully"
+    settings = cluster[name]
+
+    vmcfg.vm.hostname = name
+    vmcfg.vm.box = settings["box"]
+    vmcfg.vm.network "private_network", ip: settings["ip"]
+
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = settings["mem"]
+      vb.cpus = settings["cpu"]
+    end
+  end
+end
