@@ -4,9 +4,6 @@
 
 echo "**** Provisioning k8s worker node"
 
-# need to clean things up - not really sure why, tbh
-sudo kubeadm reset -f
-
 # execute join command found in /vagrant that was created by controller node
 join_command_script="/vagrant/join_command.sh"
 ${join_command_script}

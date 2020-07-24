@@ -13,14 +13,7 @@ Vagrant.configure("2") do |config|
 
   # ubuntu 
   box = "hashicorp/bionic64"
-
-  # Names and configs for the cluster VMs
-  # Currently all the same configs
-  cluster = {
-	"bijou" => { "ip" => "172.1.1.100", "mem" => memory, "cpu" => cpus, "box" => box },
-	"sully" => { "ip" => "172.1.1.101", "mem" => memory, "cpu" => cpus, "box" => box },
-	"sniffles" => { "ip" => "172.1.1.102", "mem" => memory, "cpu" => cpus, "box" => box }
-  }
+  config.vm.box = box
 
   # Install k3s basics
   config.vm.provision "shell" do |s|
@@ -28,21 +21,29 @@ Vagrant.configure("2") do |config|
     s.path = "./bootstrap_k8s_base.sh"
   end
 
+  # Names and configs for the cluster VMs
+  controller_node = {
+	"bijou" => { "ip" => "172.1.1.100", "mem" => memory, "cpu" => cpus },
+  }
+  worker_nodes = {
+	"sully" => { "ip" => "172.1.1.101", "mem" => memory, "cpu" => cpus },
+	"sniffles" => { "ip" => "172.1.1.102", "mem" => memory, "cpu" => cpus }
+  }
+
   # Bijou is controller node
   config.vm.define :bijou do |vmcfg|
     name = "bijou"
-    settings = cluster[name]
+    settings = controller_node[name]
 
     vmcfg.vm.hostname = name
-    vmcfg.vm.box = settings["box"]
     vmcfg.vm.network "private_network", ip: settings["ip"]
 
-    config.vm.provider "virtualbox" do |vb|
+    vmcfg.vm.provider "virtualbox" do |vb|
       vb.memory = settings["mem"]
       vb.cpus = settings["cpu"]
     end
 
-    config.vm.provision "shell" do |controller|
+    vmcfg.vm.provision "shell" do |controller|
       controller.privileged = false 	
       controller.path = "./bootstrap_k8s_control_node.sh"
       controller.args = [settings["ip"]]
@@ -50,17 +51,20 @@ Vagrant.configure("2") do |config|
   end
 
   # worker nodes
-  config.vm.define :sully do |vmcfg|
-    name = "sully"
-    settings = cluster[name]
+  worker_nodes.each do |name, settings|
+    config.vm.define name do |vmcfg|
+      vmcfg.vm.hostname = name
+      vmcfg.vm.network "private_network", ip: settings["ip"]
 
-    vmcfg.vm.hostname = name
-    vmcfg.vm.box = settings["box"]
-    vmcfg.vm.network "private_network", ip: settings["ip"]
+      vmcfg.vm.provider "virtualbox" do |vb|
+        vb.memory = settings["mem"]
+        vb.cpus = settings["cpu"]
+      end
 
-    config.vm.provider "virtualbox" do |vb|
-      vb.memory = settings["mem"]
-      vb.cpus = settings["cpu"]
+      vmcfg.vm.provision "shell" do |worker|
+        worker.privileged = false 	
+        worker.path = "./bootstrap_k8s_worker_node.sh"
+      end
     end
   end
 end
