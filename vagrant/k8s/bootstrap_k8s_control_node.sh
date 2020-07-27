@@ -4,7 +4,11 @@
 
 echo "**** Provisioning k8s control plane node"
 
-sudo kubeadm init --control-plane-endpoint ${1} --pod-network-cidr=10.244.0.0/16
+
+IP_ADDR=${1}
+HOST_NAME=$(hostname -s)                                                       
+sudo kubeadm init --control-plane-endpoint $IP_ADDR --apiserver-advertise-address=$IP_ADDR --apiserver-cert-extra-sans=$IP_ADDR  --node-name $HOST_NAME --pod-network-cidr=10.244.0.0/16
+#sudo kubeadm init --control-plane-endpoint ${1} --pod-network-cidr=10.244.0.0/16
 
 # Get the join info so that the worker nodes can join the cluster
 discovery_token=`openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'`

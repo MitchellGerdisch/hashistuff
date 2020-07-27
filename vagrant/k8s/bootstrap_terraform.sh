@@ -10,8 +10,8 @@ mkdir -p ${terraform_bin}
 
 sudo apt-get install -y unzip
 
-wget https://releases.hashicorp.com/terraform/${terraform_version}/${terraform_pkg}
-unzip ./${terraform_pkg} 2> /dev/null
+wget https://releases.hashicorp.com/terraform/${terraform_version}/${terraform_pkg}  2> /dev/null
+unzip ./${terraform_pkg} 
 mv terraform ${terraform_bin}
 rm ./${terraform_pkg}
 
