@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
 
   # ubuntu 
   #box = "hashicorp/bionic64"
-  box = ""bento/ubuntu-18.04"
+  box = "bento/ubuntu-18.04"
   config.vm.box = box
 
   # Install k3s basics
