@@ -15,3 +15,5 @@ unzip ./${terraform_pkg}
 mv terraform ${terraform_bin}
 rm ./${terraform_pkg}
 
+# Enable autocomplete
+terraform -install-autocomplete
